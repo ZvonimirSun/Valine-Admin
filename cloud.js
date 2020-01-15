@@ -4,13 +4,13 @@ const Comment = AV.Object.extend("Comment");
 const request = require("request");
 
 AV.Cloud.beforeSave("Comment", function(request) {
-  let currentComment = request.object;
   let acl = new AV.ACL();
   var admin = new AV.Role("admin");
   acl.setPublicReadAccess(true);
   acl.setPublicWriteAccess(false);
+  acl.setRoleReadAccess(admin, true);
   acl.setRoleWriteAccess(admin, true);
-  currentComment.setACL(acl);
+  request.object.setACL(acl);
 });
 
 AV.Cloud.afterSave("Comment", function(request) {
