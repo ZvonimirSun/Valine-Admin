@@ -6,13 +6,13 @@ const request = require("request");
 AV.Cloud.beforeSave("Comment", function (request) {
   const comment = request.object.get("comment");
   const mail = request.object.get("mail");
-  const admin = process.env.SITE_USER;
+  const adminMail = process.env.SITE_USER;
   const regx = /<a\s+href\s*=\s*[\\"|\'](.+)[\\"|\']>(.+)<\/a>/gi;
-  if (regx.test(comment) && mail !== admin) {
+  if (regx.test(comment) && mail !== adminMail) {
     throw new AV.Cloud.Error("非站长带链接评论！");
   } else {
     let acl = new AV.ACL();
-    var admin = new AV.Role("admin");
+    let admin = new AV.Role("admin");
     acl.setPublicReadAccess(true);
     acl.setPublicWriteAccess(false);
     acl.setRoleReadAccess(admin, true);
